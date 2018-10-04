@@ -10,9 +10,10 @@ var seed;
 var r1,g1,b1,r2,g2,b2;
 var size=22;//number of recursions
 var ldc=1.1;//length decrease factor
+var len1=20;
 var maxchildren=2;
 function gradient(x){
-return "rgba("+Math.ceil(r2+x*(r1-r2))+","+Math.ceil(g2+x*(g1-g2))+","+Math.ceil(b2+x*(b1-b2))+","+1+")";
+return "rgb("+Math.ceil(r2+x*(r1-r2))+","+Math.ceil(g2+x*(g1-g2))+","+Math.ceil(b2+x*(b1-b2))+")";
 }
 function Branch(x,y,len,ang,lifespan){
 	this.x=x;
@@ -41,7 +42,7 @@ function Branch(x,y,len,ang,lifespan){
 				var n=Math.ceil(Math.random()*maxchildren);
 				for(var i=0;i<n;i++){
 					this.children.push(new Branch(this.x+this.len*Math.cos(this.ang),this.y+this.len*Math.sin(this.ang),
-					this.len/(ldc),this.ang+Math.PI/4-Math.random()*Math.PI/2,lifespan-1));
+					this.len/(ldc),n===1?(this.ang+Math.PI/8-Math.random()*Math.PI/4):(this.ang+Math.PI/4-Math.random()*Math.PI/2),lifespan-1));
 					this.children[i].populate();
 				}
 			}
@@ -67,22 +68,16 @@ function init(){
 	slider2=document.getElementById("slider2");
 	tree();
 }	
-
-function update(){
-
-}
-function sliderUpdate(){
-
-}
 function clearCanvas(){
 	ctx.clearRect(0,0,cw,ch)}
 function tree(){
 	updateColors();
 	size=parseInt(document.getElementById("input1").value);
-	maxchildren=parseFloat(document.getElementById("input2").value);;
-	ldc=parseFloat(document.getElementById("input3").value);
+	maxchildren=parseFloat(document.getElementById("input2").value);
+	len1=parseFloat(document.getElementById("input3").value);
+	ldc=parseFloat(document.getElementById("input4").value);
 	clearCanvas();
-	seed=new Branch(300,400,20,-Math.PI/2,size);
+	seed=new Branch(300,400,len1,-Math.PI/2,size);
 	seed.populate();
 	seed.draw();
 	
@@ -125,7 +120,8 @@ display:inline-block;
 <canvas height="500" width="800" id="can"></canvas><br>
 Size (recursions)<input type="text" size="10" id="input1" value="22"><br>
 Max Children<input type="text" size="10" id="input2" value="2"><br>
-Child Length Decrease<input type="text" size="10" id="input3" value="1.1"><br>
+Initial Length<input type="text" size="10" id="input3" value="20"><br>
+Child Length Decrease<input type="text" size="10" id="input4" value="1.1"><br>
 <table>
 <tr>
 <td>Color 1 RGB</td>
